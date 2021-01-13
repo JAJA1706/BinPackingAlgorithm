@@ -2,8 +2,9 @@
 #include "BinPacking.h"
 #include <fstream>
 #include <string>
-#include "BinPackingAlgorithm.h"
 #include <vector>
+#include <sstream>
+#include <cstdlib>
 
 enum Wybor
 {
@@ -11,24 +12,30 @@ enum Wybor
     z_pliku = 1
 };
 void program_z_pliku(std::string);
+void clear_screen();
 
 int main()
 {
     int opcja = -1;
-    std::cout << "Program testujacy algorytm BinPacking." << std::endl << "Wybierz opcje:" << std::endl;
-    std::cout << "0. WyjdŸ" << std::endl << "1. Uruchom program dla danych z pliku." << std::endl;
-    std::cin >> opcja;
-    
+
     while (static_cast<Wybor>(opcja) != Wybor::wyjdz)
     {
-        switch (static_cast<Wybor>(opcja))
-        {
-        case Wybor::z_pliku:
-            std::string filename;
-            std::cout << "Podaj nazwê pliku:" << std::endl;
-            std::cin >> filename;
-            program_z_pliku(filename);
-        }
+        clear_screen();
+        std::cout << "Program testujacy algorytm BinPacking." << std::endl << "Wybierz opcje:" << std::endl;
+        std::cout << "0. Wyjdz" << std::endl << "1. Uruchom program dla danych z pliku." << std::endl;
+        std::cin >> opcja;
+    
+            switch (static_cast<Wybor>(opcja))
+            {
+            case Wybor::z_pliku:
+                std::string filename;
+                std::cout << "Podaj nazwe pliku:" << std::endl;
+                std::cin >> filename;
+                clear_screen();
+                program_z_pliku(filename);
+            }
+            std::cout << "0. Wyjdz" << std::endl << "1. Powrot do programu" << std::endl;
+            std::cin >> opcja;
     }
 
     /*float ar[] = { .85, .1, .9, .9, .1, .1, .1};
@@ -45,17 +52,35 @@ int main()
 
 void program_z_pliku(const std::string filename)
 {
+    
     std::ifstream file(filename);
-    int count = 0;
+    int count = 1;
     float value;
-    std::vector<float> sizes;
-    while (file >> value)
+
+    std::string line;
+    while (std::getline(file, line))
     {
-        sizes.push_back(value);
+        std::istringstream iss(line);
+        std::vector<float> sizes;
+        while (iss >> value)
+        {
+            sizes.push_back(value);
+        }
+        if (sizes.size() != 0)
+            std::cout << "Wynik dla linii " << count << ": " << BinPacking::BestFit(&sizes[0], sizes.size()) << std::endl;
+        else
+            std::cout << "Wynik dla linii " << count << ": " << 0 << std::endl;
+        ++count;
     }
+    std::cout << std::endl;
     file.close();
-    if (sizes.size() != 0)
-        std::cout << BinPacking::BestFit(&sizes[0], sizes.size()) << std::endl;
-    else
-        std::cout << "Nie znaleziono pliku lub plik jest pusty." << std::endl;
+}
+
+void clear_screen()
+{
+#ifdef _WIN32
+    std::system("cls");
+#else
+    std::system("clear");
+#endif
 }
