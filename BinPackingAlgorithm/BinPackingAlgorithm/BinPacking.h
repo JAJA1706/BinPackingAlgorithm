@@ -1,7 +1,8 @@
+#ifndef BINPACK_
 #define BINPACK_
-#ifndef BIPACK_
 
 #include <list>
+#include <vector>
 
 class BinPacking
 {
@@ -29,7 +30,7 @@ public:
             }
 
             guard = false;
-            for (std::list<float>::iterator it = containers.begin(); it != containers.end(); ++it)
+            for (std::list<float>::iterator it = containers.begin(); it != containers.end(); ++it) //n*m = n * n/2 * nlogn
             {
                 if (*it + array[i] <= 1)
                 {
