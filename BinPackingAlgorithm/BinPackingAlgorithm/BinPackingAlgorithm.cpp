@@ -11,9 +11,6 @@
 #include "BinPacking.h"
 #include "BinPackingBST.h"
 
-
-#define GEN_SAVE_FILENAME "test_generowane.txt"
-
 enum Wybor
 {
     wyjdz = 0,
